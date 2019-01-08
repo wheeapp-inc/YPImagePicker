@@ -19,6 +19,9 @@ public struct YPImagePickerConfiguration {
     
     public init() {}
     
+    // Fonts configuration
+    public var fonts = YPConfigFonts()
+    
     /// Scroll to change modes, defaults to true
     public var isScrollToChangeModesEnabled = true
     
@@ -215,4 +218,8 @@ public enum YPlibraryMediaType {
     case photo
     case video
     case photoAndVideo
+}
+
+public struct YPConfigFonts {
+    public var buttonFont: UIFont = UIFont()
 }
