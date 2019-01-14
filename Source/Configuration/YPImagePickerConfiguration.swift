@@ -183,6 +183,9 @@ public struct YPConfigLibrary {
 
     /// Allow to skip the selections gallery when selecting the multiple media items. Defaults to false.
     public var skipSelectionsGallery = false
+    
+    //// Set Grid Visibility on library
+    public var showsGrid = true
 }
 
 /// Encapsulates video specific settings.

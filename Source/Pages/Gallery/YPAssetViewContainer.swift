@@ -40,6 +40,7 @@ class YPAssetViewContainer: UIView {
             }
         }
         
+        grid.isHidden = !YPConfig.library.showsGrid
         grid.alpha = 0
         
         let touchDownGR = UILongPressGestureRecognizer(target: self,
