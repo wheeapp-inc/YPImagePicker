@@ -134,6 +134,9 @@ extension YPLibraryVC: UICollectionViewDelegate {
             cell.multipleSelectionIndicator.set(number: index + 1) // start at 1, not 0
         } else {
             cell.multipleSelectionIndicator.set(number: nil)
+            if YPConfig.library.isMultiselectEnabledByDefault {
+                cell.multipleSelectionIndicator.isHidden = true
+            }
         }
 
         // Prevent weird animation where thumbnail fills cell on first scrolls.
