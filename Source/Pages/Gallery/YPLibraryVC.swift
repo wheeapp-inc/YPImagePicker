@@ -14,7 +14,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal weak var delegate: YPLibraryViewDelegate?
     internal var v: YPLibraryView!
     internal var isProcessing = false // true if video or image is in processing state
-    internal var multipleSelectionEnabled = false
+    internal var multipleSelectionEnabled = true
     internal var initialized = false
     internal var selection = [YPLibrarySelection]()
     internal var currentlySelectedIndex: Int = 0
@@ -54,6 +54,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
+        
+        if YPConfig.library.isMultiselectEnabledByDefault {
+            v.assetViewContainer.multipleSelectionButton.isHidden = true
+            multipleSelectionEnabled = true
+        }
     }
     
     // MARK: - View Lifecycle

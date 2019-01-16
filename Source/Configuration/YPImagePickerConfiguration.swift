@@ -186,6 +186,8 @@ public struct YPConfigLibrary {
     
     //// Set Grid Visibility on library
     public var showsGrid = true
+    
+    public var isMultiselectEnabledByDefault = false
 }
 
 /// Encapsulates video specific settings.
