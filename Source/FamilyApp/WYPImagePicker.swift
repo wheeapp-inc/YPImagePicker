@@ -424,6 +424,7 @@ extension WYPImagePicker: YPLibraryViewDelegate {
             self.libraryVC?.v.fadeInLoader()
             self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
         }
+        self.updateUI()
     }
     
     public func libraryViewFinishedLoading() {
@@ -431,9 +432,12 @@ extension WYPImagePicker: YPLibraryViewDelegate {
         DispatchQueue.main.async {
             self.libraryVC?.v.hideLoader()
         }
+        self.updateUI()
     }
     
-    public func libraryViewDidToggleMultipleSelection(enabled: Bool) {}
+    public func libraryViewDidToggleMultipleSelection(enabled: Bool) {
+        self.updateUI()
+    }
     
     public func noPhotosForOptions() {
         self.dismiss(animated: true) {
