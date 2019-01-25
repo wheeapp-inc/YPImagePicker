@@ -186,7 +186,11 @@ public class WYPImagePicker: ColorableNavigationController {
         
         switch mode {
         case .library:
-            setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else { return }
+                self.setTitleViewWithTitle(aTitle: self.libraryVC?.title ?? "")
+            }
+            
             vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
                                                                 style: .done,
                                                                 target: self,
