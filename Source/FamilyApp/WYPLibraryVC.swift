@@ -1,28 +1,27 @@
 //
-//  YPLibraryVC.swift
+//  WYPLibraryVC.swift
 //  YPImagePicker
 //
-//  Created by Sacha Durand Saint Omer on 27/10/16.
-//  Copyright © 2016 Yummypets. All rights reserved.
+//  Created by Tymofii Dolenko on 1/26/19.
+//  Copyright © 2019 Yummypets. All rights reserved.
 //
 
 import UIKit
 import Photos
 
-public class YPLibraryVC: UIViewController, YPPermissionCheckable {
+class WYPLibraryVC: UIViewController, YPPermissionCheckable {
     
     internal weak var delegate: YPLibraryViewDelegate?
     internal var v: YPLibraryView!
     internal var isProcessing = false // true if video or image is in processing state
     internal var multipleSelectionEnabled = false
     internal var initialized = false
-    internal var firstSelection: YPLibrarySelection?
     internal var selection = [YPLibrarySelection]()
     internal var currentlySelectedIndex: Int = 0
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
     internal let panGestureHelper = PanGestureHelper()
-
+    
     // MARK: - Init
     
     public required init() {
@@ -42,7 +41,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     func initialize() {
         mediaManager.initialize()
         mediaManager.v = v
-
+        
         if mediaManager.fetchResult != nil {
             return
         }
@@ -79,7 +78,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             guard let strongSelf = self else {
                 return
             }
-
+            
             strongSelf.updateCropInfo()
         }
     }
@@ -127,7 +126,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     // MARK: - Multiple Selection
-
+    
     @objc
     func multipleSelectionButtonTapped() {
         
@@ -141,7 +140,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         multipleSelectionEnabled = !multipleSelectionEnabled
-
+        
         if multipleSelectionEnabled {
             if selection.isEmpty {
                 let asset = mediaManager.fetchResult[currentlySelectedIndex]
@@ -157,7 +156,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             selection.removeAll()
             addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
         }
-
+        
         v.assetViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
         v.collectionView.reloadData()
         checkLimit()
@@ -201,7 +200,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
         }
     }
-
+    
     // Async beacause will prompt permission if .notDetermined
     // and ask custom popup if denied.
     func checkPermissionToAccessPhotoLibrary(block: @escaping (Bool) -> Void) {
@@ -235,17 +234,15 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         } else {
             mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
         }
-                
+        
         if mediaManager.fetchResult.count > 0 {
             changeAsset(mediaManager.fetchResult[0])
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
-                                             animated: false,
-                                             scrollPosition: UICollectionView.ScrollPosition())
+                                        animated: false,
+                                        scrollPosition: UICollectionView.ScrollPosition())
             if !multipleSelectionEnabled && !YPConfig.library.isMultiselectEnabledByDefault {
                 addToSelection(indexPath: IndexPath(row: 0, section: 0))
-            } else if YPConfig.library.isMultiselectEnabledByDefault {
-                addFirstSelection()
             }
         } else {
             delegate?.noPhotosForOptions()
@@ -355,7 +352,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             self.selection.contains(where: { $0.index == self.currentlySelectedIndex }) {
             guard let selectedAssetIndex = self.selection
                 .index(where: { $0.index == self.currentlySelectedIndex }) else {
-                return nil
+                    return nil
             }
             return self.selection[selectedAssetIndex]
         }
@@ -398,36 +395,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                               videoCallback: @escaping (_ videoURL: YPMediaVideo) -> Void,
                               multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            
-            guard !self.selection.isEmpty else {
-                if let first = self.firstSelection, let asset = PHAsset.fetchAssets(withLocalIdentifiers: [first.assetIdentifier], options: PHFetchOptions()).firstObject {
-                    
-                    switch asset.mediaType {
-                    case .video:
-                        self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
-                            DispatchQueue.main.async {
-                                self.delegate?.libraryViewFinishedLoading()
-                                let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                         videoURL: videoURL, asset: asset)
-                                videoCallback(video)
-                            }
-                        })
-                    case .image:
-                        self.fetchImageAndCrop(for: asset) { image, exifMeta in
-                            DispatchQueue.main.async {
-                                self.delegate?.libraryViewFinishedLoading()
-                                let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
-                                                         exifMeta: exifMeta,
-                                                         asset: asset)
-                                photoCallback(photo)
-                            }
-                        }
-                    case .audio, .unknown:
-                        return
-                    }
-                }
-                return
-            }
             
             let selectedAssets: [(asset: PHAsset, cropRect: CGRect?)] = self.selection.map {
                 guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [$0.assetIdentifier], options: PHFetchOptions()).firstObject else { fatalError() }
@@ -475,7 +442,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     multipleItemsCallback(resultMediaItems)
                     self.delegate?.libraryViewFinishedLoading()
                 }
-        } else {
+            } else {
                 let asset = selectedAssets.first!.asset
                 switch asset.mediaType {
                 case .video:

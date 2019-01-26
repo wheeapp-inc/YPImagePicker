@@ -1,14 +1,14 @@
 //
-//  YPLibraryVC+CollectionView.swift
+//  WYPLibraryVC+CollectionView.swift
 //  YPImagePicker
 //
-//  Created by Sacha DSO on 26/01/2018.
-//  Copyright © 2018 Yummypets. All rights reserved.
+//  Created by Tymofii Dolenko on 1/26/19.
+//  Copyright © 2019 Yummypets. All rights reserved.
 //
 
 import UIKit
 
-extension YPLibraryVC {
+extension WYPLibraryVC {
     var isLimitExceeded: Bool { return selection.count >= YPConfig.library.maxNumberOfItems }
     
     func setupCollectionView() {
@@ -58,7 +58,7 @@ extension YPLibraryVC {
     func deselect(indexPath: IndexPath) {
         if let positionIndex = selection.index(where: { $0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier }) {
             selection.remove(at: positionIndex)
-
+            
             // Refresh the numbers
             var selectedIndexPaths = [IndexPath]()
             mediaManager.fetchResult.enumerateObjects { [unowned self] (asset, index, _) in
@@ -67,7 +67,7 @@ extension YPLibraryVC {
                 }
             }
             v.collectionView.reloadItems(at: selectedIndexPaths)
-
+            
             checkLimit()
         }
     }
@@ -84,16 +84,6 @@ extension YPLibraryVC {
         checkLimit()
     }
     
-    func addFirstSelection() {
-        let indexPath = IndexPath.init(row: 0, section: 0)
-        guard mediaManager.fetchResult.count > 0 else { return }
-        let asset = mediaManager.fetchResult[indexPath.item]
-        firstSelection = YPLibrarySelection(
-            index: indexPath.row,
-            assetIdentifier: asset.localIdentifier
-        )
-    }
-    
     func isInSelectionPool(indexPath: IndexPath) -> Bool {
         return selection.contains(where: { $0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier })
     }
@@ -104,13 +94,13 @@ extension YPLibraryVC {
     }
 }
 
-extension YPLibraryVC: UICollectionViewDataSource {
+extension WYPLibraryVC: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return mediaManager.fetchResult.count
     }
 }
 
-extension YPLibraryVC: UICollectionViewDelegate {
+extension WYPLibraryVC: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -121,16 +111,16 @@ extension YPLibraryVC: UICollectionViewDelegate {
         }
         cell.representedAssetIdentifier = asset.localIdentifier
         cell.multipleSelectionIndicator.selectionColor = YPConfig.colors.multipleItemsSelectedCircleColor
-                                                            ?? YPConfig.colors.tintColor
+            ?? YPConfig.colors.tintColor
         mediaManager.imageManager?.requestImage(for: asset,
-                                   targetSize: v.cellSize(),
-                                   contentMode: .aspectFill,
-                                   options: nil) { image, _ in
-                                    // The cell may have been recycled when the time this gets called
-                                    // set image only if it's still showing the same asset.
-                                    if cell.representedAssetIdentifier == asset.localIdentifier && image != nil {
-                                        cell.imageView.image = image
-                                    }
+                                                targetSize: v.cellSize(),
+                                                contentMode: .aspectFill,
+                                                options: nil) { image, _ in
+                                                    // The cell may have been recycled when the time this gets called
+                                                    // set image only if it's still showing the same asset.
+                                                    if cell.representedAssetIdentifier == asset.localIdentifier && image != nil {
+                                                        cell.imageView.image = image
+                                                    }
         }
         
         let isVideo = (asset.mediaType == .video)
@@ -148,7 +138,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 cell.multipleSelectionIndicator.isHidden = true
             }
         }
-
+        
         // Prevent weird animation where thumbnail fills cell on first scrolls.
         UIView.performWithoutAnimation {
             cell.layoutIfNeeded()
@@ -159,7 +149,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         currentlySelectedIndex = indexPath.row
-
+        
         changeAsset(mediaManager.fetchResult[indexPath.row])
         panGestureHelper.resetToOriginalState()
         
@@ -168,12 +158,12 @@ extension YPLibraryVC: UICollectionViewDelegate {
             collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         }
         v.refreshImageCurtainAlpha()
-
+        
         if multipleSelectionEnabled {
             
             let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
-
+            
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected {
                     deselect(indexPath: indexPath)
@@ -190,7 +180,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 collectionView.reloadItems(at: [previouslySelectedIndexPath])
             }
         }
-
+        
         collectionView.reloadItems(at: [indexPath])
         collectionView.reloadItems(at: [previouslySelectedIndexPath])
     }
@@ -204,7 +194,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
     }
 }
 
-extension YPLibraryVC: UICollectionViewDelegateFlowLayout {
+extension WYPLibraryVC: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView,
                                layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -212,11 +202,11 @@ extension YPLibraryVC: UICollectionViewDelegateFlowLayout {
         let width = (collectionView.frame.width - margins) / CGFloat(YPConfig.library.numberOfItemsInRow)
         return CGSize(width: width, height: width)
     }
-
+    
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return YPConfig.library.spacingBetweenItems
     }
-
+    
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return YPConfig.library.spacingBetweenItems
     }

@@ -198,7 +198,7 @@ public class WYPImagePicker: ColorableNavigationController {
             vc.navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
             
             // Disable Next Button until minNumberOfItems is reached.
-            vc.navigationItem.rightBarButtonItem?.isEnabled = libraryVC!.selection.count >= YPConfig.library.minNumberOfItems
+            vc.navigationItem.rightBarButtonItem?.isEnabled = libraryVC!.selection.count >= YPConfig.library.minNumberOfItems || libraryVC.firstSelection != nil
             
         case .camera:
             setTitleViewFlashIcon()
