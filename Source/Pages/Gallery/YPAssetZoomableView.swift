@@ -75,6 +75,8 @@ final class YPAssetZoomableView: UIScrollView {
             
             if YPConfig.library.shouldCropToSquareByDefault {
                 strongSelf.setAssetFrame(for: strongSelf.videoView, with: preview)
+            } else {
+                strongSelf.fitImage(false)
             }
             
             completion()
@@ -119,6 +121,8 @@ final class YPAssetZoomableView: UIScrollView {
             
             if YPConfig.library.shouldCropToSquareByDefault {
                 strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
+            } else {
+                strongSelf.fitImage(false)
             }
         
             completion()
