@@ -135,12 +135,10 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             selection.removeAll()
         }
         
-        // Prevent desactivating multiple selection when using `minNumberOfItems`
-        if YPConfig.library.minNumberOfItems > 1 && multipleSelectionEnabled {
-            return
+        // Prevent deactivating multiple selection when using `minNumberOfItems`
+        if !(YPConfig.library.minNumberOfItems > 1 && multipleSelectionEnabled) {
+            multipleSelectionEnabled = !multipleSelectionEnabled
         }
-        
-        multipleSelectionEnabled = !multipleSelectionEnabled
 
         if multipleSelectionEnabled {
             if selection.isEmpty {
