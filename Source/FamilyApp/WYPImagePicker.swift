@@ -164,7 +164,9 @@ public class WYPImagePicker: ColorableNavigationController {
             videoVC.start()
         }
         
-        updateUI()
+        DispatchQueue.main.async {
+            updateUI()
+        }
     }
     
     func stopCurrentCamera() {
@@ -178,6 +180,7 @@ public class WYPImagePicker: ColorableNavigationController {
     
     func updateUI() {
         let vc = currentController
+        
         // Update Nav Bar state.
         vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
                                                            style: .plain,
@@ -186,15 +189,11 @@ public class WYPImagePicker: ColorableNavigationController {
         
         switch mode {
         case .library:
-            DispatchQueue.main.async { [weak self] in
-                guard let `self` = self else { return }
-                self.setTitleViewWithTitle(aTitle: self.libraryVC?.title ?? "")
-            }
-            
+            self.setTitleViewWithTitle(aTitle: self.libraryVC?.title ?? "")
             vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
-                                                                style: .done,
-                                                                target: self,
-                                                                action: #selector(done))
+                                                                   style: .done,
+                                                                   target: self,
+                                                                   action: #selector(done))
             vc.navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
             
             // Disable Next Button until minNumberOfItems is reached.
@@ -424,27 +423,33 @@ extension WYPImagePicker: YPLibraryViewDelegate {
     
     public func libraryViewStartedLoading() {
         libraryVC?.isProcessing = true
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else { return }
             self.libraryVC?.v.fadeInLoader()
             self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
+            self.updateUI()
         }
-        self.updateUI()
     }
     
     public func libraryViewFinishedLoading() {
         libraryVC?.isProcessing = false
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else { return }
             self.libraryVC?.v.hideLoader()
+            self.updateUI()
         }
-        self.updateUI()
     }
     
     public func libraryViewDidToggleMultipleSelection(enabled: Bool) {
-        self.updateUI()
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else { return }
+            self.updateUI()
+        }
     }
     
     public func noPhotosForOptions() {
-        self.dismiss(animated: true) {
+        self.dismiss(animated: true) { [weak self] in
+            guard let `self` = self else { return }
             self.noPhotos()
         }
     }
