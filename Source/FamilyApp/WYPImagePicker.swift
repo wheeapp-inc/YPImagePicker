@@ -371,9 +371,9 @@ extension WYPImagePicker {
                 self.didSelect(items: [mediaItem])
             }
             
-            weak var _self = self
-            func showCropVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
-                guard let `self` = _self else { return }
+            
+            let showCrop: (YPMediaPhoto, @escaping (YPMediaPhoto) -> Void) -> Void = { [weak self] (photo: YPMediaPhoto, completion: @escaping (YPMediaPhoto)->Void) -> Void in
+                guard let `self` = self else { return }
                 if case let YPCropType.rectangle(ratio) = YPConfig.showsCrop {
                     let cropVC = YPCropVC(image: photo.image, ratio: ratio)
                     cropVC.didFinishCropping = { croppedImage in
@@ -393,13 +393,13 @@ extension WYPImagePicker {
                 // Show filters and then crop
                 filterVC.didSave = { outputMedia in
                     if case let YPMediaItem.photo(outputPhoto) = outputMedia {
-                        showCropVC(photo: outputPhoto, completion: completion)
+                        showCrop(outputPhoto, completion)
                     }
                 }
                 
                 self.pushViewController(filterVC, animated: true)
             } else {
-                showCropVC(photo: photo, completion: completion)
+                showCrop(photo, completion)
             }
         case .video(let video):
             if showsFilters {
