@@ -381,7 +381,7 @@ extension WYPImagePicker {
                         completion(photo)
                     }
                     
-                    _self.pushViewController(cropVC, animated: true)
+                    self.pushViewController(cropVC, animated: true)
                 } else {
                     completion(photo)
                 }
@@ -391,8 +391,7 @@ extension WYPImagePicker {
                 let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
                                                 isFromSelectionVC: false)
                 // Show filters and then crop
-                filterVC.didSave = { [weak self] outputMedia in
-                    guard let `self` = self else { return }
+                filterVC.didSave = { outputMedia in
                     if case let YPMediaItem.photo(outputPhoto) = outputMedia {
                         showCropVC(photo: outputPhoto, completion: completion)
                     }
