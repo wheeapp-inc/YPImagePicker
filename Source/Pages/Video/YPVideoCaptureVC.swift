@@ -207,7 +207,10 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         v.timeElapsedLabel.text = YPHelper.formattedStrigFrom(state.timeElapsed)
         
         // Animate progress bar changes.
-        UIView.animate(withDuration: 1, animations: v.progressBar.layoutIfNeeded)
+        UIView.animate(withDuration: 1) { [weak self] in
+            guard let `self` = self else { return }
+            self.v.progressBar.layoutIfNeeded()
+        }
     }
     
     private func resetVisualState() {

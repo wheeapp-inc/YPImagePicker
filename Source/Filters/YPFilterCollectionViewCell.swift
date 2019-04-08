@@ -13,7 +13,8 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
     let name = UILabel()
     let imageView = UIImageView()
     override var isHighlighted: Bool { didSet {
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let `self` = self else { return }
             self.contentView.transform = self.isHighlighted
                 ? CGAffineTransform(scaleX: 0.95, y: 0.95)
                 : CGAffineTransform.identity

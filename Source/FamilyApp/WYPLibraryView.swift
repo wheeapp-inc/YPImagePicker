@@ -93,7 +93,10 @@ extension WYPLibraryView {
     func updateProgress(_ progress: Float) {
         progressView.isHidden = progress > 0.99 || progress == 0
         progressView.progress = progress
-        UIView.animate(withDuration: 0.1, animations: progressView.layoutIfNeeded)
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let `self` = self else { return }
+            self.progressView.layoutIfNeeded()
+        }
     }
     
     func cellSize() -> CGSize {

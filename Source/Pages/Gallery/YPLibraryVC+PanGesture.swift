@@ -60,7 +60,8 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         UIView.animate(withDuration: 0.2,
                        delay: 0.0,
                        options: [.curveEaseInOut, .beginFromCurrentState],
-                       animations: {
+                       animations: { [weak self] in
+                        guard let `self` = self else { return }
                         self.v.refreshImageCurtainAlpha()
                         self.v.layoutIfNeeded()
         }

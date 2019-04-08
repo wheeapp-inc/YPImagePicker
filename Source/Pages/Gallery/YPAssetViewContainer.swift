@@ -140,14 +140,16 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     
     public func ypAssetZoomableViewScrollViewDidZoom() {
         if isShown {
-            UIView.animate(withDuration: 0.1) {
+            UIView.animate(withDuration: 0.1) { [weak self] in
+                guard let `self` = self else { return }
                 self.grid.alpha = 1
             }
         }
     }
     
     public func ypAssetZoomableViewScrollViewDidEndZooming() {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3) { [weak self]
+            guard let `self` = self else { return }
             self.grid.alpha = 0
         }
     }
@@ -169,12 +171,14 @@ extension YPAssetViewContainer: UIGestureRecognizerDelegate {
         switch sender.state {
         case .began:
             if isShown {
-                UIView.animate(withDuration: 0.1) {
+                UIView.animate(withDuration: 0.1) { [weak self] in
+                    guard let `self` = self else { return }
                     self.grid.alpha = 1
                 }
             }
         case .ended:
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                guard let `self` = self else { return }
                 self.grid.alpha = 0
             }
         default: ()

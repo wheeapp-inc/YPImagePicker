@@ -142,7 +142,8 @@ extension YPVideoView {
     
     /// Shows or hide the play image over the view.
     public func showPlayImage(show: Bool) {
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let `self` = self else { return }
             self.playImageView.alpha = show ? 0.8 : 0
         }
     }

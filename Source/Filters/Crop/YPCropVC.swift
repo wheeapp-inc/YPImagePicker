@@ -145,7 +145,8 @@ extension YPCropVC: UIGestureRecognizerDelegate {
         // Animate coming back to the allowed bounds with a haptic feedback.
         if wentOutOfAllowedBounds {
             generateHapticFeedback()
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in
+                guard let `self` = self else { return }
                 self.v.imageView.transform = transform
             })
         }
@@ -203,7 +204,8 @@ extension YPCropVC: UIGestureRecognizerDelegate {
         
         // Animate back to allowed bounds
         if imageRect != correctedFrame {
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in
+                guard let `self` = self else { return }
                 self.v.imageView.frame = correctedFrame
             })
         }

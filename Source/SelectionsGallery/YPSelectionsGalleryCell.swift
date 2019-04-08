@@ -61,7 +61,8 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
                            usingSpringWithDamping: 0.5,
                            initialSpringVelocity: 0,
                            options: .curveEaseInOut,
-                           animations: {
+                           animations: { [weak self] in
+                            guard let `self` = self else { return }
                             if self.isHighlighted {
                                 self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
                                 self.alpha = 0.8

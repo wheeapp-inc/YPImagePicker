@@ -133,7 +133,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         super.viewDidAppear(animated)
         shouldHideStatusBar = true
         initialStatusBarHidden = true
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let `self` = self else { return }
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
