@@ -240,9 +240,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
                                              scrollPosition: UICollectionView.ScrollPosition())
-            if !multipleSelectionEnabled && !YPConfig.library.isMultiselectEnabledByDefault {
-                addToSelection(indexPath: IndexPath(row: 0, section: 0))
-            } else if YPConfig.library.isMultiselectEnabledByDefault {
+            if YPConfig.library.isMultiselectEnabledByDefault || (!multipleSelectionEnabled && !YPConfig.library.isMultiselectEnabledByDefault) {
                 addFirstSelection()
             }
         } else {

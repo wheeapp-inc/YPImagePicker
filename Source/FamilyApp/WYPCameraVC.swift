@@ -121,9 +121,12 @@ public class WYPCameraVC: UIViewController, YPPermissionCheckable, UIGestureReco
         // causing a crash
         v.shotButton.isEnabled = false
         
-        photoCapture.shoot { imageData in
+        photoCapture.shoot { [weak self] imageData in
+            
+            guard let `self` = self else { return }
             
             guard let shotImage = UIImage(data: imageData) else {
+                self.v.shotButton.isEnabled = true
                 return
             }
             

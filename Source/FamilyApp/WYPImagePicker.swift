@@ -105,8 +105,9 @@ public class WYPImagePicker: ColorableNavigationController {
             self?._didFinishPicking?([], true)
         }
         cameraVC?.didSelectLibrary = { [weak self] in
-            guard let libraryVC = self?.libraryVC else { return }
-            self?.pushViewController(libraryVC, animated: true)
+            guard let `self` = self else { return }
+            guard let libraryVC = self.libraryVC else { return }
+            self.pushViewController(libraryVC, animated: true)
         }
         cameraVC?.didCapturePhoto = { [weak self] img in
             self?.onSelectItems([YPMediaItem.photo(p: YPMediaPhoto(image: img,
