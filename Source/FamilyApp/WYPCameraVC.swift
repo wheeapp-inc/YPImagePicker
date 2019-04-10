@@ -125,7 +125,12 @@ public class WYPCameraVC: UIViewController, YPPermissionCheckable, UIGestureReco
             
             guard let `self` = self else { return }
             
-            guard let shotImage = UIImage(data: imageData) else {
+            guard let data = imageData else {
+                self.v.shotButton.isEnabled = true
+                return
+            }
+            
+            guard let shotImage = UIImage(data: data) else {
                 self.v.shotButton.isEnabled = true
                 return
             }
