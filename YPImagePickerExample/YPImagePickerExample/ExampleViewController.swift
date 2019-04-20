@@ -64,7 +64,6 @@ class ExampleViewController: UIViewController {
     // MARK: - Configuration
     @objc
     func showPicker() {
-        
         var config = YPImagePickerConfiguration()
 
         /* Uncomment and play around with the configuration 👨‍🔬 🚀 */
@@ -169,7 +168,8 @@ class ExampleViewController: UIViewController {
         //
         //config.library.options = options
 
-        let picker = YPImagePicker(configuration: config)
+        let picker = WYPImagePicker.init()
+        //let picker = YPImagePicker(configuration: config)
 
         /* Change configuration directly */
         // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
@@ -244,4 +244,51 @@ extension ExampleViewController {
         let size = track.naturalSize.applying(track.preferredTransform)
         return CGSize(width: abs(size.width), height: abs(size.height))
     }
+}
+
+extension WYPImagePicker {
+    
+    static var wheeConfig: YPImagePickerConfiguration {
+        var config = YPImagePickerConfiguration()
+        // [Edit configuration here ...]
+        config.hidesBottomBar = true
+        config.library.maxNumberOfItems = 10
+        config.library.mediaType = .photo
+        
+        config.onlySquareImagesFromCamera = false
+        //config.usesFrontCamera = true
+        //config.showsFilters = true
+        //config.shouldSaveNewPicturesToAlbum = true
+        //config.startOnScreen = .photo
+        //config.screens = [.photo,.library]
+        //config.showsCrop = .none
+        //config.targetImageSize = YPImageSize.original
+        config.hidesStatusBar = false
+        
+        config.colors.tintColor = #colorLiteral(red: 0.2039999962, green: 0.5960000157, blue: 0.8590000272, alpha: 1)
+        config.colors.photoVideoScreenBackground = .black
+        config.icons.capturePhotoImage = #imageLiteral(resourceName: "cameraCapture.pdf")
+        config.icons.loopIcon = #imageLiteral(resourceName: "reverseCamera.pdf")
+        config.icons.flashOnIcon = #imageLiteral(resourceName: "iconFlashlightOn.pdf")
+        config.icons.flashAutoIcon = #imageLiteral(resourceName: "iconFlashlightOn.pdf")
+        config.icons.flashOffIcon = #imageLiteral(resourceName: "iconFlashlightOff.pdf")
+        
+        config.fonts.buttonFont = UIFont.systemFont(ofSize: 18)
+        
+        config.library.showsGrid = false
+        config.library.isMultiselectEnabledByDefault = true
+        return config
+    }
+    
+    convenience init() {
+        self.init(configuration: WYPImagePicker.wheeConfig)
+    }
+    
+    convenience init(maxNumberOfItems: Int) {
+        var config = WYPImagePicker.wheeConfig
+        config.library.maxNumberOfItems = maxNumberOfItems
+        config.library.isMultiselectEnabledByDefault = false
+        self.init(configuration: config)
+    }
+    
 }

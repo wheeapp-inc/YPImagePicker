@@ -237,6 +237,7 @@ class WYPLibraryVC: UIViewController, YPPermissionCheckable {
         
         if mediaManager.fetchResult.count > 0 {
             changeAsset(mediaManager.fetchResult[0])
+            //selection.removeAll()
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                         animated: false,

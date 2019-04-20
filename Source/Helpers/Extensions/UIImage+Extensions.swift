@@ -20,7 +20,7 @@ internal extension UIImage {
     /// Kudos to Trevor Harmon and his UIImage+Resize category from
     // which this code is heavily inspired.
     func resetOrientation() -> UIImage {
-        
+        print("🧶 Orientation \(imageOrientation.rawValue)")
         // Image has no orientation, so keep the same
         if imageOrientation == .up {
             return self
@@ -74,6 +74,7 @@ internal extension UIImage {
         
         if let newImageRef =  context?.makeImage() {
             let newImage = UIImage(cgImage: newImageRef)
+            print("🧶 New orientation \(newImage.imageOrientation.rawValue)")
             return newImage
         }
         

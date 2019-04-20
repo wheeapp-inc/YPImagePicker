@@ -145,7 +145,9 @@ public class WYPCameraVC: UIViewController, YPPermissionCheckable, UIGestureReco
             
             // Flip image if taken form the front camera.
             if let device = self.photoCapture.device, device.position == .front {
-                image = self.flipImage(image: image)
+                let noOrietationImage = image.resetOrientation()
+                guard let cgImage = noOrietationImage.cgImage else { return }
+                image = UIImage.init(cgImage: cgImage, scale: noOrietationImage.scale, orientation: UIImage.Orientation.upMirrored)
             }
             
             DispatchQueue.main.async {
