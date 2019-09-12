@@ -346,10 +346,10 @@ extension WYPImagePicker {
                 self.didSelect(items: items)
                 return
             } else {
-                let selectionsGalleryVC = YPSelectionsGalleryVC(items: items) { _, items in
-                    self.didSelect(items: items)
+                let selectionsGalleryVC = YPSelectionsGalleryVC(items: items) {[weak self] _, items in
+                    self?.didSelect(items: items)
                 }
-                
+
                 self.pushViewController(selectionsGalleryVC, animated: true)
                 return
             }
@@ -359,9 +359,12 @@ extension WYPImagePicker {
         let item = items.first!
         switch item {
         case .photo(let photo):
+            
             let completion = { [weak self] (photo: YPMediaPhoto) in
                 guard let `self` = self else { return }
+                
                 let mediaItem = YPMediaItem.photo(p: photo)
+                
                 // Save new image or existing but modified, to the photo album.
                 if YPConfig.shouldSaveNewPicturesToAlbum {
                     let isModified = photo.modifiedImage != nil
@@ -369,15 +372,19 @@ extension WYPImagePicker {
                         YPPhotoSaver.trySaveImage(photo.image, inAlbumNamed: YPConfig.albumName)
                     }
                 }
+                
                 self.didSelect(items: [mediaItem])
             }
             
             
             let showCrop: (YPMediaPhoto, @escaping (YPMediaPhoto) -> Void) -> Void = { [weak self] (photo: YPMediaPhoto, completion: @escaping (YPMediaPhoto)->Void) -> Void in
                 guard let `self` = self else { return }
+                
+                
                 if case let YPCropType.rectangle(ratio) = YPConfig.showsCrop {
                     let cropVC = YPCropVC(image: photo.image, ratio: ratio)
                     cropVC.didFinishCropping = { croppedImage in
+                        
                         photo.modifiedImage = croppedImage
                         completion(photo)
                     }
