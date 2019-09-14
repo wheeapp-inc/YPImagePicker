@@ -9,6 +9,8 @@
 
 import UIKit
 import Photos
+import MobileCoreServices
+import AVFoundation
 
 protocol YPAssetZoomableViewDelegate: class {
     func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView)
@@ -86,10 +88,38 @@ final class YPAssetZoomableView: UIScrollView {
             guard let strongSelf = self else { return }
             guard strongSelf.currentAsset != video else { completion() ; return }
             strongSelf.currentAsset = video
-
+            
             strongSelf.videoView.loadVideo(playerItem)
             strongSelf.videoView.play()
         }
+    }
+    
+    private func setGif(video: AVPlayerItem,asset: PHAsset, storedCropPosition: YPLibrarySelection?, preview: UIImage, completion: @escaping () -> Void){
+        
+//        guard self.currentAsset != asset else { completion() ; return }
+        
+        if self.videoView.isDescendant(of: self) == false {
+                self.isVideoMode = true
+                self.photoImageView.removeFromSuperview()
+                self.addSubview(self.videoView)
+        }
+            
+        self.videoView.setPreviewImage(preview)
+            
+        self.setAssetFrame(for: self.videoView, with: preview)
+            
+        completion()
+            
+            // Stored crop position in multiple selection
+        if let scp173 = storedCropPosition {
+            self.applyStoredCropPosition(scp173)
+        }
+        
+        guard self.currentAsset != video else { completion() ; return }
+        self.currentAsset = asset
+            
+        self.videoView.loadVideo(video)
+        self.videoView.play()
     }
     
     public func setImage(_ photo: PHAsset,
@@ -99,31 +129,52 @@ final class YPAssetZoomableView: UIScrollView {
         guard currentAsset != photo else { DispatchQueue.main.async { completion() }; return }
         currentAsset = photo
         
-        mediaManager.imageManager?.fetch(photo: photo) { [weak self] image, _ in
-            guard let strongSelf = self else { return }
-            
-            if strongSelf.photoImageView.isDescendant(of: strongSelf) == false {
-                strongSelf.isVideoMode = false
-                strongSelf.videoView.removeFromSuperview()
-                strongSelf.videoView.showPlayImage(show: false)
-                strongSelf.videoView.deallocate()
-                strongSelf.addSubview(strongSelf.photoImageView)
-            
-                strongSelf.photoImageView.contentMode = .scaleAspectFill
-                strongSelf.photoImageView.clipsToBounds = true
-            }
-            
-            strongSelf.photoImageView.image = image
-            
-            strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
-        
-            completion()
-            
-            // Stored crop position in multiple selection
-            if let scp173 = storedCropPosition {
-                strongSelf.applyStoredCropPosition(scp173)
+        if photo.isGIFImage() {
+            setGifAsMP4(photo, storedCropPosition, completion)
+        } else {
+            mediaManager.imageManager?.fetch(photo: photo) { [weak self] image, _ in
+                guard let strongSelf = self else { return }
+                
+                if strongSelf.photoImageView.isDescendant(of: strongSelf) == false {
+                    strongSelf.isVideoMode = false
+                    strongSelf.videoView.removeFromSuperview()
+                    strongSelf.videoView.showPlayImage(show: false)
+                    strongSelf.videoView.deallocate()
+                    strongSelf.addSubview(strongSelf.photoImageView)
+                    
+                    strongSelf.photoImageView.contentMode = .scaleAspectFill
+                    strongSelf.photoImageView.clipsToBounds = true
+                }
+                
+                strongSelf.photoImageView.image = image
+                
+                strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
+                
+                completion()
+                
+                // Stored crop position in multiple selection
+                if let scp173 = storedCropPosition {
+                    strongSelf.applyStoredCropPosition(scp173)
+                }
             }
         }
+    }
+    
+    private func setGifAsMP4(_ photo: PHAsset,_ storedCropPosition: YPLibrarySelection?,_ completion: @escaping () -> Void){
+        
+        photo.getURL(completionHandler: { (url) in
+            let data = try! Data(contentsOf: url!)
+            let tempUrl = URL(fileURLWithPath:NSTemporaryDirectory()).appendingPathComponent("temp.mp4")
+            GIF2MP4(data: data)?.convertAndExport(to: tempUrl, completion: { [weak self] in
+                guard let strongSelf = self else { return }
+                let video = AVPlayerItem(url: tempUrl)
+                print(tempUrl)
+                
+                let preview = strongSelf.getThumbnailImage(forUrl: tempUrl)
+                
+                strongSelf.setGif(video: video,asset: photo, storedCropPosition: storedCropPosition, preview: preview!, completion: completion)
+            })
+        })
     }
     
     fileprivate func setAssetFrame(`for` view: UIView, with image: UIImage) {
@@ -221,8 +272,24 @@ final class YPAssetZoomableView: UIScrollView {
         myDelegate?.ypAssetZoomableViewDidLayoutSubviews(self)
     }
 }
+extension YPAssetZoomableView {
+    func getThumbnailImage(forUrl url: URL) -> UIImage? {
+        let asset: AVAsset = AVAsset(url: url)
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        
+        do {
+            let thumbnailImage = try imageGenerator.copyCGImage(at: CMTimeMake(value: 1, timescale: 60) , actualTime: nil)
+            return UIImage(cgImage: thumbnailImage)
+        } catch let error {
+            print(error)
+        }
+        
+        return nil
+    }
+}
 
 // MARK: UIScrollViewDelegate Protocol
+
 extension YPAssetZoomableView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return isVideoMode ? videoView : photoImageView

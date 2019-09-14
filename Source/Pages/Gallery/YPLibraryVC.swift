@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import MobileCoreServices
 
 public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     

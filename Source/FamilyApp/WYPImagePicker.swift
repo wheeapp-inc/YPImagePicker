@@ -330,7 +330,49 @@ public class WYPImagePicker: ColorableNavigationController {
 }
 
 extension WYPImagePicker {
-    func onSelectItems(_ items: [YPMediaItem]) {
+    func getVideo(from gif: YPMediaItem, completion: @escaping(YPMediaItem) -> Void){
+        
+    }
+    
+    func onSelectItems(_ assets: [YPMediaItem]) {
+        
+        var itemsToModify = [YPMediaItem]()
+        var indexToModify = [Int]()
+        var itemsDeepCopy = [YPMediaItem]()
+        
+        for index in 0...(assets.count - 1) {
+            let item = assets[index]
+            
+            itemsDeepCopy.append(item)
+            
+            switch assets[index] {
+            case .photo(let photo):
+                let photoIsGif = photo.asset?.isGIFImage() ?? false
+                if !photoIsGif {
+                    itemsToModify.append(item)
+                    indexToModify.append(index)
+                }
+                break
+            case .video(let video):
+                break
+            }
+        }
+        
+        if itemsToModify.isEmpty {
+            self.didSelect(items: assets)
+            return
+        }
+        
+        let completeSelection :([YPMediaItem]) -> Void = { modifyedItems in
+            for (index, element) in modifyedItems.enumerated(){
+                let oldIndex = indexToModify[index]
+                itemsDeepCopy[oldIndex] = element
+                
+                let converted = YPMediaItem.video(v: YPMediaVideo(thumbnail: <#T##UIImage#>, videoURL: <#T##URL#>))
+            }
+            self.didSelect(items: itemsDeepCopy)
+        }
+        
         let showsFilters = YPConfig.showsFilters
         
         // Use Fade transition instead of default push animation
@@ -341,13 +383,13 @@ extension WYPImagePicker {
         self.view.layer.add(transition, forKey: nil)
         
         // Multiple items flow
-        if items.count > 1 {
+        if itemsToModify.count > 1 {
             if YPConfig.library.skipSelectionsGallery {
-                self.didSelect(items: items)
+                completeSelection(itemsToModify)
                 return
             } else {
-                let selectionsGalleryVC = YPSelectionsGalleryVC(items: items) {[weak self] _, items in
-                    self?.didSelect(items: items)
+                let selectionsGalleryVC = YPSelectionsGalleryVC(items: itemsToModify) {[weak self] _, items in
+                    completeSelection(items)
                 }
 
                 self.pushViewController(selectionsGalleryVC, animated: true)
@@ -356,7 +398,7 @@ extension WYPImagePicker {
         }
         
         // One item flow
-        let item = items.first!
+        let item = itemsToModify.first!
         switch item {
         case .photo(let photo):
             
@@ -373,7 +415,7 @@ extension WYPImagePicker {
                     }
                 }
                 
-                self.didSelect(items: [mediaItem])
+                completeSelection([mediaItem])
             }
             
             
@@ -414,12 +456,12 @@ extension WYPImagePicker {
                 let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                isFromSelectionVC: false)
                 videoFiltersVC.didSave = { [weak self] outputMedia in
-                    self?.didSelect(items: [outputMedia])
+                    completeSelection([outputMedia])
                 }
                 
                 self.pushViewController(videoFiltersVC, animated: true)
             } else {
-                self.didSelect(items: [YPMediaItem.video(v: video)])
+                completeSelection([YPMediaItem.video(v: video)])
             }
         }
     }
