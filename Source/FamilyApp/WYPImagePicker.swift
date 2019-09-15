@@ -330,9 +330,6 @@ public class WYPImagePicker: ColorableNavigationController {
 }
 
 extension WYPImagePicker {
-    func getVideo(from gif: YPMediaItem, completion: @escaping(YPMediaItem) -> Void){
-        
-    }
     
     func onSelectItems(_ assets: [YPMediaItem]) {
         
@@ -367,8 +364,6 @@ extension WYPImagePicker {
             for (index, element) in modifyedItems.enumerated(){
                 let oldIndex = indexToModify[index]
                 itemsDeepCopy[oldIndex] = element
-                
-                let converted = YPMediaItem.video(v: YPMediaVideo(thumbnail: <#T##UIImage#>, videoURL: <#T##URL#>))
             }
             self.didSelect(items: itemsDeepCopy)
         }
