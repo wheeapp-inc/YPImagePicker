@@ -299,6 +299,7 @@ public class WYPImagePicker: ColorableNavigationController {
             self?.setTitleViewWithTitle(aTitle: album.title)
             self?.dismiss(animated: true, completion: nil)
         }
+         navVC.modalPresentationStyle = .fullScreen 
         present(navVC, animated: true, completion: nil)
     }
     

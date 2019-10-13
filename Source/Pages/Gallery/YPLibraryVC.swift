@@ -387,6 +387,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                         y: yCrop,
                                         width: ts.width,
                                         height: ts.height)
+            //video 
             mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
         }
     }
@@ -401,14 +402,28 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     
                     switch asset.mediaType {
                     case .video:
-                        self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
+                        
+                        asset.getURL { (url) in
+                            guard let url = url else {
+                                multipleItemsCallback([])
+                                return
+                            }
+                            
                             DispatchQueue.main.async {
                                 self.delegate?.libraryViewFinishedLoading()
-                                let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                         videoURL: videoURL, asset: asset)
+                                let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(url),
+                                                         videoURL: url, asset: asset)
                                 videoCallback(video)
                             }
-                        })
+                        }
+//                        self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
+//                            DispatchQueue.main.async {
+//                                self.delegate?.libraryViewFinishedLoading()
+//                                let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+//                                                         videoURL: videoURL, asset: asset)
+//                                videoCallback(video)
+//                            }
+//                        })
                     case .image:
                         self.fetchImageAndCrop(for: asset) { image, exifMeta in
                             DispatchQueue.main.async {
@@ -457,12 +472,24 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                         
                     case .video:
-                        self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
-                            let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                         videoURL: videoURL, asset: asset.asset)
+                        asset.asset.getURL { (url) in
+                            guard let url = url else {
+                                multipleItemsCallback([])
+                                return
+                            }
+                            
+                            let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(url),
+                                                         videoURL: url, asset: asset.asset)
                             resultMediaItems.append(YPMediaItem.video(v: videoItem))
                             asyncGroup.leave()
                         }
+                        
+//                        self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
+//                            let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+//                                                         videoURL: videoURL, asset: asset.asset)
+//                            resultMediaItems.append(YPMediaItem.video(v: videoItem))
+//                            asyncGroup.leave()
+//                        }
                     default:
                         break
                     }
@@ -476,14 +503,27 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 let asset = selectedAssets.first!.asset
                 switch asset.mediaType {
                 case .video:
-                    self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
+                    asset.getURL { (url) in
+                        guard let url = url else {
+                            multipleItemsCallback([])
+                            return
+                        }
+                        
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
-                            let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                     videoURL: videoURL, asset: asset)
+                            let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(url),
+                                                     videoURL: url, asset: asset)
                             videoCallback(video)
                         }
-                    })
+                    }
+//                    self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
+//                        DispatchQueue.main.async {
+//                            self.delegate?.libraryViewFinishedLoading()
+//                            let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+//                                                     videoURL: videoURL, asset: asset)
+//                            videoCallback(video)
+//                        }
+//                    })
                 case .image:
                     self.fetchImageAndCrop(for: asset) { image, exifMeta in
                         DispatchQueue.main.async {

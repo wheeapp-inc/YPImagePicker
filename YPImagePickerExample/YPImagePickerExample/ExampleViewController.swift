@@ -54,8 +54,9 @@ class ExampleViewController: UIViewController {
             let gallery = YPSelectionsGalleryVC(items: selectedItems) { g, _ in
                 g.dismiss(animated: true, completion: nil)
             }
-            let navC = UINavigationController(rootViewController: gallery)
-            self.present(navC, animated: true, completion: nil)
+            let navVC = UINavigationController(rootViewController: gallery)
+            navVC.modalPresentationStyle = .fullScreen
+            self.present(navVC, animated: true, completion: nil)
         } else {
             print("No items selected yet.")
         }
@@ -81,6 +82,8 @@ class ExampleViewController: UIViewController {
         /* Choose what media types are available in the library. Defaults to `.photo` */
         config.library.mediaType = .photoAndVideo
 
+        config.library.isMultiselectEnabledByDefault = true;
+        config.library.maxNumberOfItems = 5;
         /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
         // config.usesFrontCamera = true
 
@@ -110,7 +113,7 @@ class ExampleViewController: UIViewController {
 
         /* Defines which screens are shown at launch, and their order.
            Default value is `[.library, .photo]` */
-        config.screens = [.library, .photo, .video]
+        config.screens = [.library]
         
         /* Can forbid the items with very big height with this property */
 //        config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
@@ -121,10 +124,10 @@ class ExampleViewController: UIViewController {
 
         /* Defines the time limit for videos from the library.
            Defaults to 60 seconds. */
-        config.video.libraryTimeLimit = 500.0
+//        config.video.libraryTimeLimit = 500.0
 
         /* Adds a Crop step in the photo taking process, after filters. Defaults to .none */
-        config.showsCrop = .rectangle(ratio: (16/9))
+//        config.showsCrop = .rectangle(ratio: (16/9))
 
         /* Defines the overlay view for the camera. Defaults to UIView(). */
         // let overlayView = UIView()
@@ -133,13 +136,13 @@ class ExampleViewController: UIViewController {
         // config.overlayView = overlayView
 
         /* Customize wordings */
-        config.wordings.libraryTitle = "Gallery"
+//        config.wordings.libraryTitle = "Gallery"
 
         /* Defines if the status bar should be hidden when showing the picker. Default is true */
-        config.hidesStatusBar = false
+//        config.hidesStatusBar = false
 
         /* Defines if the bottom bar should be hidden when showing the picker. Default is false */
-        config.hidesBottomBar = false
+        config.hidesBottomBar = true
 
         config.library.maxNumberOfItems = 5
         
@@ -168,8 +171,8 @@ class ExampleViewController: UIViewController {
         //
         //config.library.options = options
 
-        let picker = WYPImagePicker.init()
-        //let picker = YPImagePicker(configuration: config)
+//        let picker = WYPImagePicker.init()
+        let picker = YPImagePicker(configuration: config)
 
         /* Change configuration directly */
         // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
@@ -198,7 +201,7 @@ class ExampleViewController: UIViewController {
                     let playerVC = AVPlayerViewController()
                     let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
                     playerVC.player = player
-                
+                    playerVC.modalPresentationStyle = .fullScreen
                     picker.dismiss(animated: true, completion: { [weak self] in
                         self?.present(playerVC, animated: true, completion: nil)
                         print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
@@ -231,7 +234,7 @@ class ExampleViewController: UIViewController {
         //        print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
         //    })
         //}
-
+picker.modalPresentationStyle = .fullScreen
         present(picker, animated: true, completion: nil)
     }
 }

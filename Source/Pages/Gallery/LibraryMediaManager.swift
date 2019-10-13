@@ -131,7 +131,6 @@ class LibraryMediaManager {
                                                             userInfo: exportSession,
                                                             repeats: true)
                 }
-                
                 self.currentExportSessions.append(exportSession!)
                 exportSession?.exportAsynchronously(completionHandler: {
                     DispatchQueue.main.async {
