@@ -55,7 +55,8 @@ class ExampleViewController: UIViewController {
                 g.dismiss(animated: true, completion: nil)
             }
             let navVC = UINavigationController(rootViewController: gallery)
-            navVC.modalPresentationStyle = .fullScreen
+            navVC.modalTransitionStyle = .coverVertical
+            navVC.modalPresentationStyle = .overFullScreen
             self.present(navVC, animated: true, completion: nil)
         } else {
             print("No items selected yet.")
@@ -101,7 +102,7 @@ class ExampleViewController: UIViewController {
         config.shouldSaveNewPicturesToAlbum = false
 
         /* Choose the videoCompression. Defaults to AVAssetExportPresetHighestQuality */
-        config.video.compression = AVAssetExportPresetMediumQuality
+//        config.video.compression = AVAssetExportPresetMediumQuality
         
         /* Defines the name of the album when saving pictures in the user's photo library.
            In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName" */
@@ -201,7 +202,8 @@ class ExampleViewController: UIViewController {
                     let playerVC = AVPlayerViewController()
                     let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
                     playerVC.player = player
-                    playerVC.modalPresentationStyle = .fullScreen
+                    playerVC.modalTransitionStyle = .coverVertical
+                    playerVC.modalPresentationStyle = .overFullScreen
                     picker.dismiss(animated: true, completion: { [weak self] in
                         self?.present(playerVC, animated: true, completion: nil)
                         print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
@@ -234,7 +236,10 @@ class ExampleViewController: UIViewController {
         //        print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
         //    })
         //}
-picker.modalPresentationStyle = .fullScreen
+        picker.modalTransitionStyle = .coverVertical
+        picker.modalPresentationStyle = .overFullScreen
+//        picker.modalPresentationCapturesStatusBarAppearance = true
+//        picker.modalPresentationStyle = .currentContext
         present(picker, animated: true, completion: nil)
     }
 }

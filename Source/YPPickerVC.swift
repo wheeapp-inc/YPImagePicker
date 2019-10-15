@@ -205,7 +205,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             self?.setTitleViewWithTitle(aTitle: album.title)
             self?.dismiss(animated: true, completion: nil)
         }
-        navVC.modalPresentationStyle = .fullScreen
+        navVC.modalTransitionStyle = .coverVertical
+        navVC.modalPresentationStyle = .overFullScreen
         present(navVC, animated: true, completion: nil)
     }
     

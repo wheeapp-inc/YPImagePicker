@@ -135,6 +135,10 @@ public class YPImagePicker: UINavigationController {
                     videoFiltersVC.didSave = { [weak self] outputMedia in
                         self?.didSelect(items: [outputMedia])
                     }
+//                    videoFiltersVC.modalTransitionStyle = .coverVertical
+//                    videoFiltersVC.modalPresentationStyle = .overFullScreen
+//                    videoFiltersVC.modalPresentationCapturesStatusBarAppearance = true
+//                    videoFiltersVC.modalPresentationStyle = .overFullScreen
                     self?.pushViewController(videoFiltersVC, animated: true)
                 } else {
                     self?.didSelect(items: [YPMediaItem.video(v: video)])
