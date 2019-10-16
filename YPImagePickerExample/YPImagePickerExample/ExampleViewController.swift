@@ -173,7 +173,7 @@ class ExampleViewController: UIViewController {
         //config.library.options = options
 
 //        let picker = WYPImagePicker.init()
-        let picker = YPImagePicker(configuration: config)
+        let picker = WYPImagePicker(configuration: WYPImagePicker.wheeConfig)
 
         /* Change configuration directly */
         // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
@@ -261,7 +261,7 @@ extension WYPImagePicker {
         // [Edit configuration here ...]
         config.hidesBottomBar = true
         config.library.maxNumberOfItems = 10
-        config.library.mediaType = .photo
+        config.library.mediaType = .photoAndVideo
         
         config.onlySquareImagesFromCamera = false
         //config.usesFrontCamera = true

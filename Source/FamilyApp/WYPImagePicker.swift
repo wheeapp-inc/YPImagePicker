@@ -356,18 +356,20 @@ extension WYPImagePicker {
         var indexToModify = [Int]()
         
         for index in 0...(assets.count - 1) {
+            let item = assets[index]
+            
             switch assets[index] {
             case .photo(let photo):
                 let photoIsGif = photo.asset?.isGIFImage() ?? false
                 
                 if !photoIsGif {
-                    let item = assets[index]
-                    
                     itemsToModify.append(item)
                     indexToModify.append(index)
                 }
                 break
             case .video(let video):
+                itemsToModify.append(item)
+                indexToModify.append(index)
                 break
             }
         }
