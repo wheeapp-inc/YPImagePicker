@@ -276,6 +276,7 @@ extension YPVideoFiltersVC {
     
     func configureViewForTheme() {
         view.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        trimmerView.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
         trimmerView.mainColor = WheeThemeManager.shared.titleColor
         trimmerView.handleColor = WheeThemeManager.shared.viewBackgroundContrastColor
         trimmerView.positionBarColor = WheeThemeManager.shared.viewBackgroundContrastColor
