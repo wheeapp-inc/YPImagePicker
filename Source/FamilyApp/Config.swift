@@ -18,6 +18,9 @@ public extension YPImagePickerConfiguration {
     
     static func wheeConfig(for startScreen: WYPImagePickerMode) -> YPImagePickerConfiguration {
         var config = YPImagePickerConfiguration()
+        config.hidesBottomBar = true
+        config.library.maxNumberOfItems = 10
+        config.library.mediaType = .photoAndVideo
         
         switch startScreen {
         case .camera:
@@ -30,16 +33,15 @@ public extension YPImagePickerConfiguration {
             config.library.mediaType = .video
             config.startOnScreen = .library
         }
-        
-        config.hidesBottomBar = true
-        config.library.maxNumberOfItems = 10
-        
+
         config.onlySquareImagesFromCamera = false
-        
+
         config.hidesStatusBar = false
-        
+
         config.colors.tintColor = #colorLiteral(red: 0.2039999962, green: 0.5960000157, blue: 0.8590000272, alpha: 1)
         config.colors.photoVideoScreenBackground = .black
+
+        config.fonts.buttonFont = UIFont.systemFont(ofSize: 18)
         
         config.library.showsGrid = false
         config.library.isMultiselectEnabledByDefault = true

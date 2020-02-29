@@ -46,6 +46,7 @@ public class YPSelectionsGalleryVC: UIViewController {
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
+        configureViewForTheme()
     }
 
     @objc
@@ -125,5 +126,19 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             ? UIScrollView.DecelerationRate.fast
             : UIScrollView.DecelerationRate.normal
         lastContentOffsetX = scrollView.contentOffset.x
+    }
+}
+
+extension YPSelectionsGalleryVC {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
+            configureViewForTheme()
+            NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
+        }
+    }
+    
+    func configureViewForTheme() {
+        view.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
     }
 }

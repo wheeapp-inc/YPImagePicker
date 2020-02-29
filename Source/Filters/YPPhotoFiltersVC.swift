@@ -95,6 +95,8 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         touchDownGR.delegate = self
         v.imageView.addGestureRecognizer(touchDownGR)
         v.imageView.isUserInteractionEnabled = true
+        
+        configureViewForTheme()
     }
     
     // MARK: Setup - ⚙️
@@ -188,5 +190,19 @@ extension YPPhotoFiltersVC: UICollectionViewDelegate {
         selectedFilter = filters[indexPath.row]
         currentlySelectedImageThumbnail = filteredThumbnailImagesArray[indexPath.row]
         self.v.imageView.image = currentlySelectedImageThumbnail
+    }
+}
+
+extension YPPhotoFiltersVC {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
+            configureViewForTheme()
+            NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
+        }
+    }
+    
+    func configureViewForTheme() {
+        view.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
     }
 }

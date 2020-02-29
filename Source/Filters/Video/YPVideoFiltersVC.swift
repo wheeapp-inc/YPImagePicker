@@ -82,6 +82,8 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                                                                action: #selector(cancel))
         }
         setupRightBarButtonItem()
+        
+        configureViewForTheme()
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -260,5 +262,22 @@ extension YPVideoFiltersVC: ThumbSelectorViewDelegate {
             let imageRef = try? imageGenerator.copyCGImage(at: imageTime, actualTime: nil) {
             coverImageView.image = UIImage(cgImage: imageRef)
         }
+    }
+}
+
+extension YPVideoFiltersVC {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
+            configureViewForTheme()
+            NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
+        }
+    }
+    
+    func configureViewForTheme() {
+        view.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        trimmerView.mainColor = WheeThemeManager.shared.titleColor
+        trimmerView.handleColor = WheeThemeManager.shared.viewBackgroundContrastColor
+        trimmerView.positionBarColor = WheeThemeManager.shared.viewBackgroundContrastColor
     }
 }

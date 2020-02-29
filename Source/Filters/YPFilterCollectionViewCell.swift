@@ -23,7 +23,7 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
     }
     override var isSelected: Bool { didSet {
         name.textColor = isSelected
-            ? UIColor(r: 38, g: 38, b: 38)
+            ? WheeThemeManager.shared.titleColor
             : UIColor(r: 154, g: 154, b: 154)
         
         name.font = .systemFont(ofSize: 11, weight: isSelected
@@ -57,5 +57,10 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
         self.layer.shadowOffset = CGSize(width: 4, height: 7)
         self.layer.shadowRadius = 5
         self.layer.backgroundColor = UIColor.clear.cgColor
+        registerListenerForThemeChange(callBack: #selector(setupForTheme))
+    }
+    
+    @objc func setupForTheme() {
+        isSelected = Bool(isSelected)
     }
 }

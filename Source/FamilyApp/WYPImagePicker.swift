@@ -13,34 +13,34 @@ import Stevia
 
 extension YPLibraryVC: NavigationBarColorable {
     public var navigationBarTintColor: UIColor? {
-        return .white
+        return WheeThemeManager.shared.viewBackgroundColor
     }
 }
 extension YPSelectionsGalleryVC: NavigationBarColorable {
     public var navigationBarTintColor: UIColor? {
-        return .white
+        return WheeThemeManager.shared.viewBackgroundColor
     }
 }
 extension YPAlbumVC: NavigationBarColorable {
     public var navigationBarTintColor: UIColor? {
-        return .white
+        return WheeThemeManager.shared.viewBackgroundColor
     }
 }
 extension YPCropVC: NavigationBarColorable {
     public var navigationBarTintColor: UIColor? {
-        return .white
+        return WheeThemeManager.shared.viewBackgroundColor
     }
 }
 
 extension YPPhotoFiltersVC: NavigationBarColorable {
     public var navigationBarTintColor: UIColor? {
-        return .white
+        return WheeThemeManager.shared.viewBackgroundColor
     }
 }
 
 extension YPVideoFiltersVC: NavigationBarColorable {
     public var navigationBarTintColor: UIColor? {
-        return .white
+        return WheeThemeManager.shared.viewBackgroundColor
     }
 }
 
@@ -127,11 +127,11 @@ public class WYPImagePicker: ColorableNavigationController {
         configureViewForTheme()
     }
     
-//    public override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        
-//        updateMode(with: currentController)
-//    }
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        updateMode(with: currentController)
+    }
     
     deinit {
         print("Picker deinited 👍")
@@ -571,11 +571,13 @@ class WheeThemeManager {
     static let shared = WheeThemeManager()
     
     var viewBackgroundColor: UIColor = .black
+    var viewBackgroundContrastColor: UIColor = .black
     var titleColor: UIColor = .black
     
     var theme: WheeTheme = .light {
         didSet {
             viewBackgroundColor = theme == .dark ? .black : .white
+            viewBackgroundContrastColor = theme == .dark ? UIColor.init(r: 28.0/255.0, g: 28.0/255.0, b: 30.0/255.0) : .white
             titleColor = theme == .dark ? UIColor.white.withAlphaComponent(0.8) : .black
         }
     }

@@ -532,6 +532,6 @@ extension WYPLibraryVC {
     }
     
     func configureViewForTheme() {
-        
+        v.configureViewForTheme()
     }
 }
