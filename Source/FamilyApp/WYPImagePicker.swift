@@ -554,6 +554,7 @@ extension WYPImagePicker {
         navigationBar.barTintColor = WheeThemeManager.shared.viewBackgroundColor
         navigationBar.tintColor = WheeThemeManager.shared.titleColor
         navigationBar.titleTextAttributes = [.foregroundColor: WheeThemeManager.shared.titleColor]
+        updateUI()
     }
 }
 
