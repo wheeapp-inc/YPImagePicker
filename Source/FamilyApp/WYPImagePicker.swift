@@ -212,6 +212,8 @@ public class WYPImagePicker: ColorableNavigationController {
             setTitleViewFlashIcon()
             vc.navigationItem.rightBarButtonItem = nil
         }
+        
+        configureViewForTheme()
     }
     
     func setTitleViewFlashIcon() {
@@ -545,16 +547,19 @@ extension WYPImagePicker {
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if #available(iOS 13.0, *) {
             WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
-            configureViewForTheme()
+            updateUI()
             NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
         }
     }
     
     func configureViewForTheme() {
+        if mode == .camera {
+            navigationBar.barTintColor = .black
+            return
+        }
         navigationBar.barTintColor = WheeThemeManager.shared.viewBackgroundColor
         navigationBar.tintColor = WheeThemeManager.shared.titleColor
         navigationBar.titleTextAttributes = [.foregroundColor: WheeThemeManager.shared.titleColor]
-        updateUI()
     }
 }
 
@@ -574,12 +579,21 @@ class WheeThemeManager {
     var viewBackgroundColor: UIColor = .black
     var viewBackgroundContrastColor: UIColor = .black
     var titleColor: UIColor = .black
+    var trimmerColor: UIColor = .black
+    var trimmerHandleColor: UIColor = .black
+    var itemSelectedColor: UIColor = .black
+    var itemColor: UIColor = .black
     
     var theme: WheeTheme = .light {
         didSet {
             viewBackgroundColor = theme == .dark ? .black : .white
-            viewBackgroundContrastColor = theme == .dark ? UIColor.init(r: 28.0/255.0, g: 28.0/255.0, b: 30.0/255.0) : .white
+            viewBackgroundContrastColor = theme == .dark ? UIColor.init(r: 28.0, g: 28.0, b: 30.0) : .white
             titleColor = theme == .dark ? UIColor.white.withAlphaComponent(0.8) : .black
+            trimmerHandleColor = theme == .dark ? UIColor.init(r: 227.0, g: 226.0, b: 238.0) : .white
+            trimmerColor = theme == .dark ? UIColor.init(r: 28.0, g: 28.0, b: 30.0) : .black
+            
+            itemColor = theme == .dark ? UIColor.init(r: 54.0, g: 54.0, b: 65.0) : UIColor(r: 153, g: 153, b: 153)
+            itemSelectedColor = theme == .dark ? UIColor.init(r: 227.0, g: 226.0, b: 238.0).withAlphaComponent(0.7) : UIColor(r: 38, g: 38, b: 38)
         }
     }
 }

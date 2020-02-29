@@ -66,7 +66,7 @@ class ExampleViewController: UIViewController {
     // MARK: - Configuration
     @objc
     func showPicker() {
-        let picker = WYPImagePicker(startOnScreen: .camera)
+        let picker = WYPImagePicker(startOnScreen: .photo)
 
         /* Multiple media implementation */
         picker.didFinishPicking { [unowned picker] items, cancelled in

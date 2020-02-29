@@ -12,7 +12,7 @@ struct YPLoaders {
 
     static var defaultLoader: UIBarButtonItem {
         let spinner = UIActivityIndicatorView(style: .gray)
-        spinner.color = YPConfig.colors.navigationBarActivityIndicatorColor
+        spinner.color = WheeThemeManager.shared.itemSelectedColor
         spinner.startAnimating()
         return UIBarButtonItem(customView: spinner)
     }

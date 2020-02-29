@@ -20,7 +20,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var coverThumbSelectorView: ThumbSelectorView!
-
+    
     public var inputVideo: YPMediaVideo!
     public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url) }
     
@@ -45,14 +45,9 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-
-        trimmerView.mainColor = YPConfig.colors.trimmerMainColor
-        trimmerView.handleColor = YPConfig.colors.trimmerHandleColor
-        trimmerView.positionBarColor = YPConfig.colors.positionLineColor
+        
         trimmerView.maxDuration = YPConfig.video.trimmerMaxDuration
         trimmerView.minDuration = YPConfig.video.trimmerMinDuration
-        
-        coverThumbSelectorView.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
         
         trimBottomItem.textLabel.text = YPConfig.wordings.trim
         coverBottomItem.textLabel.text = YPConfig.wordings.cover
@@ -277,8 +272,33 @@ extension YPVideoFiltersVC {
     func configureViewForTheme() {
         view.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
         trimmerView.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        trimmerView.subviews.forEach { $0.backgroundColor = .clear }
         
-        trimBottomItem.textLabel.text = YPConfig.wordings.trim
-        coverBottomItem.textLabel.text = YPConfig.wordings.cover
+        if trimmerView.isHidden == false {
+            trimBottomItem.select()
+            coverBottomItem.deselect()
+        } else {
+            trimBottomItem.deselect()
+            coverBottomItem.select()
+        }
+        
+        trimmerView.superview?.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        trimmerView.mainColor = WheeThemeManager.shared.trimmerColor
+        trimmerView.handleColor = WheeThemeManager.shared.trimmerHandleColor
+        trimmerView.positionBarColor = WheeThemeManager.shared.trimmerColor
+        
+        coverThumbSelectorView.thumbBorderColor = WheeThemeManager.shared.trimmerColor
+        
+        for view in coverThumbSelectorView.subviews {
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            var alpha: CGFloat = 0
+
+            view.backgroundColor?.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            if alpha == 0.7 {
+                view.backgroundColor = WheeThemeManager.shared.viewBackgroundColor.withAlphaComponent(0.7)
+            }
+        }
     }
 }

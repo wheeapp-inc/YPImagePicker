@@ -50,11 +50,11 @@ final class YPMenuItem: UIView {
     }
     
     func selectedColor() -> UIColor {
-        return YPImagePickerConfiguration.shared.bottomMenuItemSelectedColour
+        return WheeThemeManager.shared.itemSelectedColor
     }
     
     func unselectedColor() -> UIColor {
-        return YPImagePickerConfiguration.shared.bottomMenuItemUnSelectedColour
+        return WheeThemeManager.shared.itemColor
     }
     
     func select() {
