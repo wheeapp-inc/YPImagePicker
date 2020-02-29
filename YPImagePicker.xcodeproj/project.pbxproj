@@ -11,6 +11,7 @@
 		3C3F4B7B21FC9CEB005301F0 /* WYPLibraryVC+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3F4B7A21FC9CEB005301F0 /* WYPLibraryVC+CollectionView.swift */; };
 		3C3F4B7D21FC9D93005301F0 /* WYPLibrary+LibraryChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3F4B7C21FC9D93005301F0 /* WYPLibrary+LibraryChange.swift */; };
 		3C3F4B7F21FC9DD1005301F0 /* WYPLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3F4B7E21FC9DD1005301F0 /* WYPLibraryView.swift */; };
+		3C73A4BB240A8D4C00D877C7 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C73A4BA240A8D4C00D877C7 /* Config.swift */; };
 		3CBB615C21E4F539002B23B5 /* WYPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBB615821E4F539002B23B5 /* WYPImagePicker.swift */; };
 		3CBB615D21E4F539002B23B5 /* WYPCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBB615921E4F539002B23B5 /* WYPCameraVC.swift */; };
 		3CBB615E21E4F539002B23B5 /* WYPCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBB615A21E4F539002B23B5 /* WYPCameraView.swift */; };
@@ -111,6 +112,7 @@
 		3C3F4B7A21FC9CEB005301F0 /* WYPLibraryVC+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WYPLibraryVC+CollectionView.swift"; sourceTree = "<group>"; };
 		3C3F4B7C21FC9D93005301F0 /* WYPLibrary+LibraryChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WYPLibrary+LibraryChange.swift"; sourceTree = "<group>"; };
 		3C3F4B7E21FC9DD1005301F0 /* WYPLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYPLibraryView.swift; sourceTree = "<group>"; };
+		3C73A4BA240A8D4C00D877C7 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		3CBB615821E4F539002B23B5 /* WYPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYPImagePicker.swift; sourceTree = "<group>"; };
 		3CBB615921E4F539002B23B5 /* WYPCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYPCameraVC.swift; sourceTree = "<group>"; };
 		3CBB615A21E4F539002B23B5 /* WYPCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYPCameraView.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 		3CBB615721E4F511002B23B5 /* FamilyApp */ = {
 			isa = PBXGroup;
 			children = (
+				3C73A4BA240A8D4C00D877C7 /* Config.swift */,
 				3CBB615B21E4F539002B23B5 /* NavigationBarColorable.swift */,
 				3CBB615921E4F539002B23B5 /* WYPCameraVC.swift */,
 				3CBB615A21E4F539002B23B5 /* WYPCameraView.swift */,
@@ -612,7 +615,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -638,6 +641,7 @@
 				99C6D6C51F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift in Sources */,
 				3CBB615E21E4F539002B23B5 /* WYPCameraView.swift in Sources */,
 				990FD295201B3E59002A39A1 /* YPDragDirection.swift in Sources */,
+				3C73A4BB240A8D4C00D877C7 /* Config.swift in Sources */,
 				99278DAE205140F60059532E /* YPPermissionDeniedPopup.swift in Sources */,
 				99CF6D21201B70A000487F77 /* YPLibraryVC+CollectionView.swift in Sources */,
 				99CF6D1B201B6A5C00487F77 /* UICollectionView+Extensions.swift in Sources */,

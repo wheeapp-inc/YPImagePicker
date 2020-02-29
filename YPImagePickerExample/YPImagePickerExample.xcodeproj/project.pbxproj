@@ -261,7 +261,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/Localize.swift";
+			shellScript = "${SRCROOT}/Localize.swift\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

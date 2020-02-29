@@ -80,11 +80,6 @@ public class WYPImagePicker: ColorableNavigationController {
         return controllerFor(mode: mode)
     }
     
-    /// Get a YPImagePicker instance with the default configuration.
-    public convenience init() {
-        self.init(configuration: YPImagePickerConfiguration.shared)
-    }
-    
     /// Get a YPImagePicker with the specified configuration.
     public required init(configuration: YPImagePickerConfiguration) {
         YPImagePickerConfiguration.shared = configuration
@@ -100,6 +95,7 @@ public class WYPImagePicker: ColorableNavigationController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        view.setThemeManagerStyle()
         
         cameraVC?.didCancel = { [weak self] in
             self?._didFinishPicking?([], true)
@@ -114,10 +110,21 @@ public class WYPImagePicker: ColorableNavigationController {
                                                                           fromCamera: true))])
         }
         
-        viewControllers = [cameraVC]
+        // Select good mode
+        if YPConfig.screens.contains(YPConfig.startOnScreen) {
+            switch YPConfig.startOnScreen {
+            case .library:
+                viewControllers = [libraryVC]
+            case .photo:
+                viewControllers = [cameraVC]
+            case .video:
+                viewControllers = [libraryVC]
+            }
+        }
+        
         setupLoadingView()
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = .black
+        configureViewForTheme()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -239,7 +246,7 @@ public class WYPImagePicker: ColorableNavigationController {
             label.font = navBarTitleFont
         }
         // Use custom textColor if set by user.
-        if let navBarTitleColor = UINavigationBar.appearance().titleTextAttributes?[.foregroundColor] as? UIColor {
+        if let navBarTitleColor = navigationBar.titleTextAttributes?[.foregroundColor] as? UIColor {
             label.textColor = navBarTitleColor
         }
         
@@ -253,7 +260,7 @@ public class WYPImagePicker: ColorableNavigationController {
             let arrow = UIImageView()
             arrow.image = YPConfig.icons.arrowDownIcon
             
-            let attributes = UINavigationBar.appearance().titleTextAttributes
+            let attributes = navigationBar.titleTextAttributes
             if let attributes = attributes, let foregroundColor = attributes[NSAttributedString.Key.foregroundColor] as? UIColor {
                 arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
                 arrow.tintColor = foregroundColor
@@ -261,7 +268,6 @@ public class WYPImagePicker: ColorableNavigationController {
             
             let button = UIButton()
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
-            button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
             
             titleView.sv(
                 label,
@@ -533,4 +539,68 @@ extension WYPCameraVC {
         v.shotButton.isEnabled = true
     }
     
+}
+
+extension WYPImagePicker {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
+            configureViewForTheme()
+            NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
+        }
+    }
+    
+    func configureViewForTheme() {
+        navigationBar.barTintColor = WheeThemeManager.shared.viewBackgroundColor
+        navigationBar.tintColor = WheeThemeManager.shared.titleColor
+        navigationBar.titleTextAttributes = [.foregroundColor: WheeThemeManager.shared.titleColor]
+    }
+}
+
+enum WheeTheme {
+    case dark
+    case light
+}
+
+extension Notification.Name {
+    static let wheeThemeChanged = Notification.Name("wheeThemeChanged")
+}
+
+class WheeThemeManager {
+    
+    static let shared = WheeThemeManager()
+    
+    var viewBackgroundColor: UIColor = .black
+    var titleColor: UIColor = .black
+    
+    var theme: WheeTheme = .light {
+        didSet {
+            viewBackgroundColor = theme == .dark ? .black : .white
+            titleColor = theme == .dark ? UIColor.white.withAlphaComponent(0.8) : .black
+        }
+    }
+}
+
+extension UIView {
+    func registerListenerForThemeChange(callBack selector: Selector) {
+        NotificationCenter.default.addObserver(self, selector: selector, name: .wheeThemeChanged, object: nil)
+    }
+}
+
+extension UIViewController {
+    func registerListenerForThemeChange(callBack selector: Selector) {
+        NotificationCenter.default.addObserver(self, selector: selector, name: .wheeThemeChanged, object: nil)
+    }
+}
+
+extension UIView {
+    func setThemeManagerStyle() {
+        // decide theme from system dark mode settings
+        // TODO: override from user settings
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = traitCollection.userInterfaceStyle == .dark ? .dark : .light
+        } else {
+            WheeThemeManager.shared.theme = .light
+        }
+    }
 }

@@ -81,6 +81,8 @@ class WYPLibraryVC: UIViewController, YPPermissionCheckable {
             
             strongSelf.updateCropInfo()
         }
+        
+        configureViewForTheme()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -517,5 +519,19 @@ class WYPLibraryVC: UIViewController, YPPermissionCheckable {
     
     deinit {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
+    }
+}
+
+extension WYPLibraryVC {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
+            configureViewForTheme()
+            NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
+        }
+    }
+    
+    func configureViewForTheme() {
+        
     }
 }

@@ -66,118 +66,7 @@ class ExampleViewController: UIViewController {
     // MARK: - Configuration
     @objc
     func showPicker() {
-        var config = YPImagePickerConfiguration()
-
-        /* Uncomment and play around with the configuration 👨‍🔬 🚀 */
-
-        /* Set this to true if you want to force the  library output to be a squared image. Defaults to false */
-//         config.library.onlySquare = true
-
-        /* Set this to true if you want to force the camera output to be a squared image. Defaults to true */
-        // config.onlySquareImagesFromCamera = false
-
-        /* Ex: cappedTo:1024 will make sure images from the library or the camera will be
-           resized to fit in a 1024x1024 box. Defaults to original image size. */
-        // config.targetImageSize = .cappedTo(size: 1024)
-
-        /* Choose what media types are available in the library. Defaults to `.photo` */
-        config.library.mediaType = .photoAndVideo
-
-        config.library.isMultiselectEnabledByDefault = true;
-        config.library.maxNumberOfItems = 5;
-        /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
-        // config.usesFrontCamera = true
-
-        /* Adds a Filter step in the photo taking process. Defaults to true */
-        // config.showsFilters = false
-
-        /* Manage filters by yourself */
-//        config.filters = [YPFilter(name: "Mono", coreImageFilterName: "CIPhotoEffectMono"),
-//                          YPFilter(name: "Normal", coreImageFilterName: "")]
-//        config.filters.remove(at: 1)
-//        config.filters.insert(YPFilter(name: "Blur", coreImageFilterName: "CIBoxBlur"), at: 1)
-
-        /* Enables you to opt out from saving new (or old but filtered) images to the
-           user's photo library. Defaults to true. */
-        config.shouldSaveNewPicturesToAlbum = false
-
-        /* Choose the videoCompression. Defaults to AVAssetExportPresetHighestQuality */
-//        config.video.compression = AVAssetExportPresetMediumQuality
-        
-        /* Defines the name of the album when saving pictures in the user's photo library.
-           In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName" */
-        // config.albumName = "ThisIsMyAlbum"
-
-        /* Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`.
-           Default value is `.photo` */
-        config.startOnScreen = .library
-
-        /* Defines which screens are shown at launch, and their order.
-           Default value is `[.library, .photo]` */
-        config.screens = [.library]
-        
-        /* Can forbid the items with very big height with this property */
-//        config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
-
-        /* Defines the time limit for recording videos.
-           Default is 30 seconds. */
-        // config.video.recordingTimeLimit = 5.0
-
-        /* Defines the time limit for videos from the library.
-           Defaults to 60 seconds. */
-//        config.video.libraryTimeLimit = 500.0
-
-        /* Adds a Crop step in the photo taking process, after filters. Defaults to .none */
-//        config.showsCrop = .rectangle(ratio: (16/9))
-
-        /* Defines the overlay view for the camera. Defaults to UIView(). */
-        // let overlayView = UIView()
-        // overlayView.backgroundColor = .red
-        // overlayView.alpha = 0.3
-        // config.overlayView = overlayView
-
-        /* Customize wordings */
-//        config.wordings.libraryTitle = "Gallery"
-
-        /* Defines if the status bar should be hidden when showing the picker. Default is true */
-//        config.hidesStatusBar = false
-
-        /* Defines if the bottom bar should be hidden when showing the picker. Default is false */
-        config.hidesBottomBar = true
-
-        config.library.maxNumberOfItems = 5
-        
-        /* Disable scroll to change between mode */
-        // config.isScrollToChangeModesEnabled = false
-//        config.library.minNumberOfItems = 2
-        
-        /* Skip selection gallery after multiple selections */
-        // config.library.skipSelectionsGallery = true
-
-        /* Here we use a per picker configuration. Configuration is always shared.
-           That means than when you create one picker with configuration, than you can create other picker with just
-           let picker = YPImagePicker() and the configuration will be the same as the first picker. */
-        
-        
-        /* Only show library pictures from the last 3 days */
-        //let threDaysTimeInterval: TimeInterval = 3 * 60 * 60 * 24
-        //let fromDate = Date().addingTimeInterval(-threDaysTimeInterval)
-        //let toDate = Date()
-        //let options = PHFetchOptions()
-        //options.predicate = NSPredicate(format: "creationDate > %@ && creationDate < %@", fromDate as CVarArg, toDate as CVarArg)
-        //
-        ////Just a way to set order
-        //let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
-        //options.sortDescriptors = [sortDescriptor]
-        //
-        //config.library.options = options
-
-//        let picker = WYPImagePicker.init()
-        let picker = WYPImagePicker(configuration: WYPImagePicker.wheeConfig)
-
-        /* Change configuration directly */
-        // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
-        
+        let picker = WYPImagePicker(startOnScreen: .video)
 
         /* Multiple media implementation */
         picker.didFinishPicking { [unowned picker] items, cancelled in
@@ -212,34 +101,9 @@ class ExampleViewController: UIViewController {
             }
         }
 
-        /* Single Photo implementation. */
-        // picker.didFinishPicking { [unowned picker] items, _ in
-        //     self.selectedItems = items
-        //     self.selectedImageV.image = items.singlePhoto?.image
-        //     picker.dismiss(animated: true, completion: nil)
-        // }
-
-        /* Single Video implementation. */
-        //picker.didFinishPicking { [unowned picker] items, cancelled in
-        //    if cancelled { picker.dismiss(animated: true, completion: nil); return }
-        //
-        //    self.selectedItems = items
-        //    self.selectedImageV.image = items.singleVideo?.thumbnail
-        //
-        //    let assetURL = items.singleVideo!.url
-        //    let playerVC = AVPlayerViewController()
-        //    let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
-        //    playerVC.player = player
-        //
-        //    picker.dismiss(animated: true, completion: { [weak self] in
-        //        self?.present(playerVC, animated: true, completion: nil)
-        //        print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
-        //    })
-        //}
         picker.modalTransitionStyle = .coverVertical
         picker.modalPresentationStyle = .overFullScreen
-//        picker.modalPresentationCapturesStatusBarAppearance = true
-//        picker.modalPresentationStyle = .currentContext
+        
         present(picker, animated: true, completion: nil)
     }
 }
@@ -254,49 +118,18 @@ extension ExampleViewController {
     }
 }
 
-extension WYPImagePicker {
+public extension WYPImagePicker {
     
-    static var wheeConfig: YPImagePickerConfiguration {
-        var config = YPImagePickerConfiguration()
-        // [Edit configuration here ...]
-        config.hidesBottomBar = true
-        config.library.maxNumberOfItems = 10
-        config.library.mediaType = .photoAndVideo
-        
-        config.onlySquareImagesFromCamera = false
-        //config.usesFrontCamera = true
-        //config.showsFilters = true
-        //config.shouldSaveNewPicturesToAlbum = true
-        //config.startOnScreen = .photo
-        //config.screens = [.photo,.library]
-        //config.showsCrop = .none
-        //config.targetImageSize = YPImageSize.original
-        config.hidesStatusBar = false
-        
-        config.colors.tintColor = #colorLiteral(red: 0.2039999962, green: 0.5960000157, blue: 0.8590000272, alpha: 1)
-        config.colors.photoVideoScreenBackground = .black
-        config.icons.capturePhotoImage = #imageLiteral(resourceName: "cameraCapture.pdf")
-        config.icons.loopIcon = #imageLiteral(resourceName: "reverseCamera.pdf")
-        config.icons.flashOnIcon = #imageLiteral(resourceName: "iconFlashlightOn.pdf")
-        config.icons.flashAutoIcon = #imageLiteral(resourceName: "iconFlashlightOn.pdf")
-        config.icons.flashOffIcon = #imageLiteral(resourceName: "iconFlashlightOff.pdf")
-        
-        config.fonts.buttonFont = UIFont.systemFont(ofSize: 18)
-        
-        config.library.showsGrid = false
-        config.library.isMultiselectEnabledByDefault = true
-        return config
+    convenience init(startOnScreen: WYPImagePickerMode = .camera) {
+        self.init(configuration: .wheeConfig(for: startOnScreen))
+        modalTransitionStyle = .coverVertical
+        modalPresentationStyle = .overFullScreen
     }
-    
-    convenience init() {
-        self.init(configuration: WYPImagePicker.wheeConfig)
-    }
-    
-    convenience init(maxNumberOfItems: Int) {
-        var config = WYPImagePicker.wheeConfig
+
+    convenience init(startOnScreen: WYPImagePickerMode = .camera, maxNumberOfItems: Int) {
+        var config: YPImagePickerConfiguration = .wheeConfig(for: startOnScreen)
         config.library.maxNumberOfItems = maxNumberOfItems
         config.library.isMultiselectEnabledByDefault = false
         self.init(configuration: config)
     }
-    
 }

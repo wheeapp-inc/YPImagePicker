@@ -41,6 +41,7 @@ class YPAlbumVC: UIViewController {
                                                            action: #selector(close))
         setUpTableView()
         fetchAlbumsInBackground()
+        configureViewForTheme()
     }
     
     func fetchAlbumsInBackground() {
@@ -94,5 +95,22 @@ extension YPAlbumVC: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectAlbum?(albums[indexPath.row])
+    }
+}
+
+extension YPAlbumVC {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
+            configureViewForTheme()
+            NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
+        }
+    }
+    
+    func configureViewForTheme() {
+        view.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        navigationController?.navigationBar.barTintColor = WheeThemeManager.shared.viewBackgroundColor
+        navigationController?.navigationBar.tintColor = WheeThemeManager.shared.titleColor
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: WheeThemeManager.shared.titleColor]
     }
 }
