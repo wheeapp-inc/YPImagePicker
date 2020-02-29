@@ -127,11 +127,11 @@ public class WYPImagePicker: ColorableNavigationController {
         configureViewForTheme()
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        updateMode(with: currentController)
-    }
+//    public override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        updateMode(with: currentController)
+//    }
     
     deinit {
         print("Picker deinited 👍")

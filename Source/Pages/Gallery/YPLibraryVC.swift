@@ -564,3 +564,17 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
 }
+
+extension YPLibraryVC {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            WheeThemeManager.shared.theme = view.traitCollection.userInterfaceStyle == .dark ? .dark : .light
+            configureViewForTheme()
+            NotificationCenter.default.post(name: .wheeThemeChanged, object: nil, userInfo: nil)
+        }
+    }
+    
+    func configureViewForTheme() {
+        v.configureViewForTheme()
+    }
+}

@@ -36,10 +36,9 @@ final class YPLibraryView: UIView {
             |line| ~ 1
         )
         
-        line.backgroundColor = .white
-        
         setupMaxNumberOfItemsView()
         setupProgressBarView()
+        configureViewForTheme()
     }
     
     /// At the bottom there is a view that is visible when selected a limit of items with multiple selection
@@ -148,5 +147,14 @@ extension YPLibraryView {
     func cellSize() -> CGSize {
         let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
         return CGSize(width: size, height: size)
+    }
+}
+
+extension YPLibraryView {
+    func configureViewForTheme() {
+        backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        line.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        collectionView.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        assetZoomableView.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
     }
 }
