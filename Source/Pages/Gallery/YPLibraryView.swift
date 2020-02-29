@@ -156,5 +156,7 @@ extension YPLibraryView {
         line.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
         collectionView.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
         assetZoomableView.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        maxNumberWarningView.backgroundColor = WheeThemeManager.shared.viewBackgroundColor
+        maxNumberWarningLabel.textColor = WheeThemeManager.shared.titleColor
     }
 }

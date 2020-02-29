@@ -87,6 +87,10 @@ public class WYPImagePicker: ColorableNavigationController {
         cameraVC = WYPCameraVC()
         super.init(nibName: nil, bundle: nil)
         libraryVC.delegate = self
+        
+        if configuration.library.mediaType == .video {
+            libraryVC.title = YPConfig.wordings.videoTitle
+        }
     }
     
     public required init?(coder aDecoder: NSCoder) {
